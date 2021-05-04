@@ -8,6 +8,7 @@ import time
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import joblib
 
 def getData():
     class0Directory = r"C:\Users\hoefs\Documents\Celegans_ModelGen\\0"
@@ -45,6 +46,8 @@ def performPCA(x_train,x_test):
     startTime = time.time()
     pca = PCA(0.95)
     pca.fit(x_train)
+    joblib.dump(pca,"pcaFit.pkl")
+
     x_train = pca.transform(x_train)
     x_test = pca.transform(x_test)
     print("--- %s minutes for PCA---" % str(((time.time() - startTime)/60)))
@@ -99,3 +102,5 @@ print("--- %s seconds for testing---" % (time.time() - start_time))
     
 print(confusion_matrix(y_test,y_pred))
 print(classification_report(y_test,y_pred))
+
+joblib.dump(clf,'TrainedModel.pkl',compress=9)
