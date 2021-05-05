@@ -18,6 +18,24 @@ def loadData():
     testFiles = glob.glob(dataPath)
     return testFiles
 
+def imadjust(image, inlo, inhi, outlo, outhi, gamma):
+    n_image = image/np.max(image)
+    return 255*((outhi-outlo)*(n_image-inlo)/(inhi-inlo)**gamma + outlo)
+
+
+def im_process(image, do_gradient=True):
+    g_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    g_transform = imadjust(g_image, 0, 1, 0, 1, 3)
+    
+    if do_gradient:
+        smoothed = cv2.GaussianBlur(g_transform, (5, 5), 2)
+        gradient = cv2.Laplacian(smoothed, cv2.CV_64F)
+        equalized = np.absolute(gradient)
+        normalized = equalized/np.max(equalized)
+        return np.uint8(255*normalized)
+    else:
+        return np.uint8(g_transform)
+
 testFiles = loadData()  
 # load in the trained model from SVM and PCA
 trainedModel = joblib.load('TrainedModel.pkl')
@@ -27,9 +45,9 @@ pcaFit = joblib.load('pcaFit.pkl')
 for file in testFiles:
     X = []
     image = cv2.imread(file)
-    feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    feature = np.asarray(feature)
-    X.append(feature)
+    feature = im_process(image,False)
+    X.append(np.array(feature))
+    
    
     x_test = np.zeros([len(X),101,101])
     for i in range(len(X)):
