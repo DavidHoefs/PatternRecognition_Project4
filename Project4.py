@@ -11,8 +11,8 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 
 def getData():
-    class0Directory = r"C:\Users\hoefs\Documents\Celegans_ModelGen\\0"
-    class1Directory = r"C:\Users\hoefs\Documents\Celegans_ModelGen\\1"
+    class0Directory = r"C:\Users\hoefs\Desktop\Altered_Celegens_ModelGen\\0"
+    class1Directory = r"C:\Users\hoefs\Desktop\Altered_Celegens_ModelGen\\1"
 
     dataPath0 = os.path.join(class0Directory,'*g')
     c0Files = glob.glob(dataPath0)
@@ -25,20 +25,42 @@ def getData():
     # import c0 files
     for file in c0Files:
         image = cv2.imread(file)
-        feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        feature = np.asarray(feature)
+        # feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # feature = np.asarray(feature)
+        # X.append(np.array(feature))
+        feature = im_process(image,False)
         X.append(np.array(feature))
         y.append(0)
     
     for file in c1Files:
         image = cv2.imread(file)
-        feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        feature = np.asarray(feature)
+        # feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # feature = np.asarray(feature)
+        feature = im_process(image,False)
         X.append(np.array(feature))
         y.append(1)
 
     return X,y
 
+def imadjust(image, inlo, inhi, outlo, outhi, gamma):
+    n_image = image/np.max(image)
+    return 255*((outhi-outlo)*(n_image-inlo)/(inhi-inlo)**gamma + outlo)
+
+
+def im_process(image, do_gradient=True):
+    g_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    g_transform = imadjust(g_image, 0, 1, 0, 1, 3)
+    
+    if do_gradient:
+        smoothed = cv2.GaussianBlur(g_transform, (5, 5), 2)
+        gradient = cv2.Laplacian(smoothed, cv2.CV_64F)
+        equalized = np.absolute(gradient)
+        normalized = equalized/np.max(equalized)
+        return np.uint8(255*normalized)
+    else:
+        return np.uint8(g_transform)
+
+    
 def performPCA(x_train,x_test):
     sc = StandardScaler()
     x_train = sc.fit_transform(x_train)
@@ -57,7 +79,7 @@ def performPCA(x_train,x_test):
 
 
 X,y = getData()
-X_train,X_test,y_train,y_test = train_test_split(X,y)
+X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.8)
 
 # Reformat Data     
 x__train = np.zeros([len(X_train), 101,101])
@@ -90,8 +112,7 @@ y_test = np.array(y_test,dtype= 'f')
 # Perform PCA
 x_train,x_test = performPCA(x_train,x_test)
 
-
-clf = svm.SVC(C = 1.0,kernel = 'rbf')
+clf = svm.SVC(C = 20 ,kernel = 'rbf')
 startTime = time.time()
 clf.fit(x_train,y_train)
 print("--- %s seconds for training---" % (time.time() - startTime))
@@ -99,8 +120,9 @@ print("--- %s seconds for training---" % (time.time() - startTime))
 start_time = time.time()
 y_pred = clf.predict(x_test)
 print("--- %s seconds for testing---" % (time.time() - start_time))
-    
+
 print(confusion_matrix(y_test,y_pred))
 print(classification_report(y_test,y_pred))
+
 
 joblib.dump(clf,'TrainedModel.pkl',compress=9)
