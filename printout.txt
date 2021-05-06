@@ -1,0 +1,14 @@
+File: \image_1.png             Classification: 0
+File: \image_100.png           Classification: 0
+File: \image_10000.png         Classification: 0
+File: \image_10001.png         Classification: 0
+File: \image_4.png             Classification: 1
+File: \image_64.png            Classification: 1
+File: \image_72.png            Classification: 0
+File: \image_73.png            Classification: 0
+File: \image_74.png            Classification: 0
+File: \image_75.png            Classification: 0
+File: \image_76.png            Classification: 0
+File: \image_77.png            Classification: 0
+File: \image_78.png            Classification: 1
+There are 3 worms and 10 pictures without worms.

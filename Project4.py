@@ -79,7 +79,7 @@ def performPCA(x_train,x_test):
 
 
 X,y = getData()
-X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.8)
+X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.95)
 
 # Reformat Data     
 x__train = np.zeros([len(X_train), 101,101])
@@ -118,11 +118,19 @@ clf.fit(x_train,y_train)
 print("--- %s seconds for training---" % (time.time() - startTime))
 
 start_time = time.time()
+
 y_pred = clf.predict(x_test)
 print("--- %s seconds for testing---" % (time.time() - start_time))
-
+print("SCORE:")
+print(clf.score(x_test,y_test))
+print("CONFUSION MATRIX:")
 print(confusion_matrix(y_test,y_pred))
+print("CLASSIFICATION REPORT")
 print(classification_report(y_test,y_pred))
+print("support vectors:")
+print(clf.support_vectors_)
+print("Coefficients:")
+print(clf.dual_coef_)
 
 
 joblib.dump(clf,'TrainedModel.pkl',compress=9)
