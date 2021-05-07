@@ -1,5 +1,5 @@
 # PROJECT 4
-# Pattern Recognition Spring 2021
+# Class: Pattern Recognition Spring 2021
 # AUTHORS: John Stroupe, Alyssa Watson, David Hoefs
 
 import numpy as np
@@ -128,18 +128,7 @@ print("--- %s seconds for testing---" % (time.time() - start_time))
 print("SCORE:")
 print(clf.score(x_test,y_test))
 
-# cAccuracy.append((c,clf.score(x_test,y_test)))
-# cFormatted = []
-# accFormatted = []
-# for i in range(len(cAccuracy) - 1):
-#     c,acc = cAccuracy[i+1]
-#     accFormatted.append(acc)
-#     cFormatted.append(c)
 
-# pl.plot(accFormatted,cFormatted,"Accuracy with different C-values")
-# pl.xlabel('C-value')
-# pl.ylabel("Accuracy")
-# pl.show()
 
 print("CONFUSION MATRIX:")
 print(confusion_matrix(y_test,y_pred))
