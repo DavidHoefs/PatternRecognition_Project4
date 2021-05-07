@@ -12,6 +12,7 @@ import time
 from sklearn.metrics import classification_report, confusion_matrix,ConfusionMatrixDisplay
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import KFold
 import joblib
 
 
@@ -81,7 +82,8 @@ def performPCA(x_train,x_test):
 
 X,y = getData()
 # split the dataset into training and test
-X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.99)
+X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.9)
+
 
 # Reformat Data     
 x__train = np.zeros([len(X_train), 101,101])
@@ -116,6 +118,7 @@ cAccuracy = [()]
 x_train,x_test = performPCA(x_train,x_test)
 # for i in range(100):
 
+
 clf = svm.SVC(C = 20 ,kernel = 'rbf')
 startTime = time.time()
 clf.fit(x_train,y_train)
@@ -124,6 +127,8 @@ print("--- %s seconds for training---" % (time.time() - startTime))
 start_time = time.time()
 
 y_pred = clf.predict(x_test)
+acc = clf.score(x_test,y_test)
+
 print("--- %s seconds for testing---" % (time.time() - start_time))
 print("SCORE:")
 print(clf.score(x_test,y_test))
