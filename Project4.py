@@ -13,7 +13,7 @@ from sklearn.metrics import classification_report, confusion_matrix,ConfusionMat
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import joblib
-from matplotlib import pyplot as pl
+
 
 # Get data from the Celegens dataset 
 def getData():
