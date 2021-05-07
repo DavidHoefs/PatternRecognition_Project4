@@ -1,3 +1,7 @@
+# PROJECT 4
+# Pattern Recognition Spring 2021
+# AUTHORS: John Stroupe, Alyssa Watson, David Hoefs
+
 import numpy as np
 import cv2
 import os
@@ -5,11 +9,13 @@ import glob
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 import time
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix,ConfusionMatrixDisplay
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import joblib
+from matplotlib import pyplot as pl
 
+# Get data from the Celegens dataset 
 def getData():
     class0Directory = r"C:\Users\hoefs\Desktop\Altered_Celegens_ModelGen\\0"
     class1Directory = r"C:\Users\hoefs\Desktop\Altered_Celegens_ModelGen\\1"
@@ -25,23 +31,18 @@ def getData():
     # import c0 files
     for file in c0Files:
         image = cv2.imread(file)
-        # feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # feature = np.asarray(feature)
-        # X.append(np.array(feature))
         feature = im_process(image,False)
         X.append(np.array(feature))
         y.append(0)
     
     for file in c1Files:
         image = cv2.imread(file)
-        # feature = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # feature = np.asarray(feature)
         feature = im_process(image,False)
         X.append(np.array(feature))
         y.append(1)
 
     return X,y
-
+# Image preprocessing
 def imadjust(image, inlo, inhi, outlo, outhi, gamma):
     n_image = image/np.max(image)
     return 255*((outhi-outlo)*(n_image-inlo)/(inhi-inlo)**gamma + outlo)
@@ -60,7 +61,7 @@ def im_process(image, do_gradient=True):
     else:
         return np.uint8(g_transform)
 
-    
+# Performs PCA on the training and test datasets   
 def performPCA(x_train,x_test):
     sc = StandardScaler()
     x_train = sc.fit_transform(x_train)
@@ -79,7 +80,8 @@ def performPCA(x_train,x_test):
 
 
 X,y = getData()
-X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.95)
+# split the dataset into training and test
+X_train,X_test,y_train,y_test = train_test_split(X,y,shuffle=True,train_size=.99)
 
 # Reformat Data     
 x__train = np.zeros([len(X_train), 101,101])
@@ -110,7 +112,9 @@ y_train = np.array(y_train,dtype= 'f')
 y_test = np.array(y_test,dtype= 'f')
 
 # Perform PCA
+cAccuracy = [()]
 x_train,x_test = performPCA(x_train,x_test)
+# for i in range(100):
 
 clf = svm.SVC(C = 20 ,kernel = 'rbf')
 startTime = time.time()
@@ -123,6 +127,20 @@ y_pred = clf.predict(x_test)
 print("--- %s seconds for testing---" % (time.time() - start_time))
 print("SCORE:")
 print(clf.score(x_test,y_test))
+
+# cAccuracy.append((c,clf.score(x_test,y_test)))
+# cFormatted = []
+# accFormatted = []
+# for i in range(len(cAccuracy) - 1):
+#     c,acc = cAccuracy[i+1]
+#     accFormatted.append(acc)
+#     cFormatted.append(c)
+
+# pl.plot(accFormatted,cFormatted,"Accuracy with different C-values")
+# pl.xlabel('C-value')
+# pl.ylabel("Accuracy")
+# pl.show()
+
 print("CONFUSION MATRIX:")
 print(confusion_matrix(y_test,y_pred))
 print("CLASSIFICATION REPORT")

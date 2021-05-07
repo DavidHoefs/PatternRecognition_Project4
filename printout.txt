@@ -22,7 +22,7 @@ File: \image_27.png            Classification: 0
 File: \image_28.png            Classification: 0
 File: \image_29.png            Classification: 0
 File: \image_3.png             Classification: 0
-File: \image_30.png            Classification: 0
+File: \image_30.png            Classification: 1
 File: \image_31.png            Classification: 0
 File: \image_32.png            Classification: 0
 File: \image_33.png            Classification: 0
@@ -60,7 +60,7 @@ File: \image_61.png            Classification: 0
 File: \image_62.png            Classification: 1
 File: \image_63.png            Classification: 1
 File: \image_64.png            Classification: 1
-File: \image_65.png            Classification: 1
+File: \image_65.png            Classification: 0
 File: \image_66.png            Classification: 0
 File: \image_67.png            Classification: 1
 File: \image_68.png            Classification: 1
@@ -81,10 +81,10 @@ File: \image_80.png            Classification: 0
 File: \image_81.png            Classification: 0
 File: \image_82.png            Classification: 1
 File: \image_83.png            Classification: 0
-File: \image_84.png            Classification: 0
+File: \image_84.png            Classification: 1
 File: \image_85.png            Classification: 0
 File: \image_86.png            Classification: 0
-File: \image_87.png            Classification: 0
+File: \image_87.png            Classification: 1
 File: \image_88.png            Classification: 1
 File: \image_89.png            Classification: 1
 File: \image_9.png             Classification: 1
@@ -98,4 +98,4 @@ File: \image_96.png            Classification: 1
 File: \image_97.png            Classification: 1
 File: \image_98.png            Classification: 1
 File: \image_99.png            Classification: 1
-There are 44 worms and 56 pictures without worms.
+There are 46 worms and 54 pictures without worms.
